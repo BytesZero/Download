@@ -1,12 +1,16 @@
 package com.zsl.download.entity;
 
+import com.litesuits.orm.db.annotation.Table;
+
 import java.io.Serializable;
 
 /**
  * FileInof
  * Created by zsl on 15/5/20.
  */
+@Table("Fileinfo")
 public class Fileinfo implements Serializable{
+
     private int id;
     private String fileName,url;
     private int length,filished;
