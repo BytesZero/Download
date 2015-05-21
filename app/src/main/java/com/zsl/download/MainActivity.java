@@ -1,6 +1,9 @@
 package com.zsl.download;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -65,10 +68,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
+
+        //设置进度条
+        pb_plan.setMax(100);
+
         //创建文件信息
         fileinfo=new Fileinfo(0,"QQ for Mac",url,0,0);
         tv_fileName.setText(fileinfo.getFileName());
         db.save(fileinfo);
+
+        //注册广播接收器
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(DownloadService.ACTION_UPDATE);
+        registerReceiver(mReceiver,filter);
 
     }
 
@@ -77,5 +89,25 @@ public class MainActivity extends AppCompatActivity {
         bt_start= (Button) findViewById(R.id.list_item_bt_start);
         bt_stop= (Button) findViewById(R.id.list_item_bt_stop);
         pb_plan= (ProgressBar) findViewById(R.id.list_item_pb_plan);
+    }
+
+    /**
+     * 更新进度条的广播接收器
+     */
+    BroadcastReceiver mReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction()==DownloadService.ACTION_UPDATE){
+                int finished=intent.getIntExtra("finished",0);
+                pb_plan.setProgress(finished);
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销广播
+        unregisterReceiver(mReceiver);
     }
 }

@@ -1,6 +1,8 @@
 package com.zsl.download.entity;
 
+import com.litesuits.orm.db.annotation.Column;
 import com.litesuits.orm.db.annotation.NotNull;
+import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 
 /**
@@ -9,12 +11,18 @@ import com.litesuits.orm.db.annotation.Table;
  */
 @Table("ThreadInfo")
 public class ThreadInfo {
+    public static final String COL_ID= "id";
+    public static final String COL_URL= "url";
 
-    @NotNull
+
+    @PrimaryKey(PrimaryKey.AssignType.AUTO_INCREMENT)
+    @Column(COL_ID)
     private int id;
+
 
     @NotNull
     private String url;
+
     @NotNull
     private int start,end,finished;
 
